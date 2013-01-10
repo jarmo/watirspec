@@ -12,8 +12,7 @@ module WatirSpec
       end
 
       def report
-        gs = WatirSpec.implementation.matching_guards_in(guards).
-               sort_by { |g| g[:data][:file] }
+        gs = WatirSpec.implementation.matching_guards_in(guards)
         print "\n\nWatirSpec guards for this implementation: "
         
         if gs.empty?

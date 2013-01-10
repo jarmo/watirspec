@@ -121,7 +121,7 @@ describe "FileField" do
         element.value.should include(File.basename(path)) # only some browser will return the full path
         messages.first.should include(File.basename(path))
 
-        browser.button(:name, "new_user_submit").click
+        #browser.button(:name, "new_user_submit").click
       end
 
       it "raises an error if the file does not exist" do

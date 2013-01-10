@@ -141,7 +141,7 @@ describe "FileField" do
         path    = File.expand_path(__FILE__)
         element = browser.file_field(:name, "new_user_portrait")
 
-        element.value = path
+        #element.value = path
         element.value.should include(File.basename(path)) # only some browser will return the full path
       end
     end

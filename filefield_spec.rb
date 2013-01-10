@@ -124,12 +124,10 @@ describe "FileField" do
         browser.button(:name, "new_user_submit").click
       end
 
-      not_compliant_on :phantomjs do
-        it "raises an error if the file does not exist" do
-          lambda {
-            browser.file_field.set(File.join(Dir.tmpdir, 'unlikely-to-exist'))
-          }.should raise_error(Errno::ENOENT)
-        end
+      it "raises an error if the file does not exist" do
+        lambda {
+          browser.file_field.set(File.join(Dir.tmpdir, 'unlikely-to-exist'))
+        }.should raise_error(Errno::ENOENT)
       end
     end
   end

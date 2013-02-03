@@ -106,7 +106,7 @@ module WatirSpec
     set :run,           false
     set :environment,   :production
     set :bind,          "localhost" if WatirSpec.platform == :windows
-    set :port,          find_free_port_above(2000 * (ENV['TEST_ENV_NUMBER'].to_i + 1))
+    set :port,          find_free_port_above(2000)
 
     get '/' do
       self.class.name

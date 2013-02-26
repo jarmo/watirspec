@@ -124,10 +124,12 @@ describe "FileField" do
         browser.button(:name, "new_user_submit").click
       end
 
-      it "raises an error if the file does not exist" do
-        lambda {
-          browser.file_field.set(File.join(Dir.tmpdir, 'unlikely-to-exist'))
-        }.should raise_error(Errno::ENOENT)
+      bug "https://github.com/detro/ghostdriver/issues/183", :phantomjs do 
+        it "raises an error if the file does not exist" do
+          lambda {
+            browser.file_field.set(File.join(Dir.tmpdir, 'unlikely-to-exist'))
+          }.should raise_error(Errno::ENOENT)
+        end
       end
     end
   end
@@ -135,33 +137,37 @@ describe "FileField" do
 
   describe "#value=" do
     not_compliant_on [:webdriver, :iphone] do
-      it "is able to set a file path in the field and click the upload button and fire the onchange event" do
-        browser.goto WatirSpec.url_for("forms_with_input_elements.html", :needs_server => true)
+      bug "https://github.com/detro/ghostdriver/issues/183", :phantomjs do
+        it "is able to set a file path in the field and click the upload button and fire the onchange event" do
+          browser.goto WatirSpec.url_for("forms_with_input_elements.html", :needs_server => true)
 
-        path    = File.expand_path(__FILE__)
-        element = browser.file_field(:name, "new_user_portrait")
+          path    = File.expand_path(__FILE__)
+          element = browser.file_field(:name, "new_user_portrait")
 
-        element.value = path
-        element.value.should include(File.basename(path)) # only some browser will return the full path
+          element.value = path
+          element.value.should include(File.basename(path)) # only some browser will return the full path
+        end
       end
     end
 
     not_compliant_on :internet_explorer, [:webdriver, :chrome], [:webdriver, :iphone] do
-      # for chrome, the check also happens in the driver
-      it "does not raise an error if the file does not exist" do
-        path = File.join(Dir.tmpdir, 'unlikely-to-exist')
-        browser.file_field.value = path
+      bug "https://github.com/detro/ghostdriver/issues/183", :phantomjs do
+        # for chrome, the check also happens in the driver
+        it "does not raise an error if the file does not exist" do
+          path = File.join(Dir.tmpdir, 'unlikely-to-exist')
+          browser.file_field.value = path
 
-        expected = path
-        expected.gsub!("/", "\\") if WatirSpec.platform == :windows
+          expected = path
+          expected.gsub!("/", "\\") if WatirSpec.platform == :windows
 
-        browser.file_field.value.should == expected
-      end
+          browser.file_field.value.should == expected
+        end
 
-      it "does not alter its argument" do
-        value = '/foo/bar'
-        browser.file_field.value = value
-        value.should == '/foo/bar'
+        it "does not alter its argument" do
+          value = '/foo/bar'
+          browser.file_field.value = value
+          value.should == '/foo/bar'
+        end
       end
     end
   end
